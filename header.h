@@ -21,7 +21,7 @@
 #define batasAkhirMakanan 6
 //struct time_t;
 typedef char string[2000];
-
+int no_nota;
 typedef struct tChild* adrChild;
 typedef struct tParent* adrParent;
 
@@ -152,9 +152,25 @@ int isEmptyMi (JMakan J);
 int isEmptyMa (JMakan J);
 void tampilanListMeja(int xOrdinat,int YOrdinat,ListParent LP);
 
-adrParent getLastParent (ListParent LP);
 void printChildByParentNamaUntukEdit(int x, int y,ListParent L,string idP);// print summar yuntuk edit.
 void printChildByParentMakananUntukEdit(int x,int y,ListParent L,int idP);// print summar untuk edit lagi.
 
 adrChild cekMakanan (adrChild Z,string nama );
+void printChildUntukHapus(int x, int y,adrParent P);
+adrChild findMakananUntukDelete(int nomor,adrParent X);
+int getJumlahNota (ListParent LP);
 
+void deleteAtMinuman(adrParent P,adrChild C);//dipakai buat split
+void deleteAtMakanan(adrParent P,adrChild C);
+void lepasNode(ListParent *LP, adrParent P);//melepas node
+
+void ReadMakananTerbanyak(JMakan *X);
+void SaveMakananTerbanyak(JMakan X);
+void SaveNotaLaporan(adrParent Nota);
+void BacaNotaLaporan(ListParent *LP,float *OmzetALltime, float *OmzetToday);
+
+void sortingNotaSplit(adrParent P,int minorplus);//sorting untuk split
+float hitungOmzetNow (ListParent *LP);
+
+void insertFirstMinumanforFH(ListParent *L,int no_nota, Pesanan X);
+void insertLastMinumanforFH(ListParent *L,int no_nota, Pesanan X);

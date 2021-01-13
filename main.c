@@ -3,40 +3,55 @@
 //Made with some headache, errors, and funs
 //9875,9880,9963,9879
 //by KWB
-//Thank you Sir Edu for SD
-
-//vER 26 November 2019, Last Fix 17.40
-
+//Thank you Sir Edu for StrukturData
+//vER 27 November 2019, Last Fix 20.38
+	
 int main(int argc, char *argv[]) {
-	ListParent LP;
+	
+	ListParent LP,ListBaca;
 	adrParent nota_single,nota_nama,E;
 	adrChild child;
 	Nota Data_Nota;
+	JMakan J;
+	
 	char pil;
-	int no,nomor_meja,no_nota=0,showNomorMeja;
+	
 	string nama_p;
 	string nama,keterangan,tanggal;
+	string keyword;
+	
 	Nota N;
 	Pesanan P;
-	int menu,jumlah;
-	float harga,total,totNota;
-	string keyword;
+	
+	
+	
 	int X=0,cek=0;
 	int xOrdinat,YOrdinat;
-	int counter=0;
+	int counter=0,cekMasukPertama=0;
+	int menu,jumlah,cekPilih;
+	int no,nomor_meja,showNomorMeja;
 	
+	float OmzetToday=0,OmzetAllTime=0;
+	float harga,total,totNota;
+	
+	no_nota=0;
 	maximize();
 	init_List(&LP);
-	JMakan J;
+	init_List(&ListBaca);
 	inieJumlah (&J);
-	// headerTabel(17,3,"Kode","Nama","Harga");
-
+	BacaNotaLaporan(&ListBaca,&OmzetAllTime,&OmzetToday);
+	ReadMakananTerbanyak(&J);
+	int *x;
+	int y = 12;
+	x = &y;
+	cekMasukPertama++;
 	do
 	{
-		sortingNota (&LP);
+		SaveMakananTerbanyak(J);
 		xOrdinat= 75;
 		YOrdinat = 0;
 		system("CLS");
+		printf("%p",*x);
 		system("COLOR F5");
 		printf("\n\t================== LA GRANDE CAFE =================\n");
 		printf("\n\t   [1] Menu Input Nota dan Menu");
@@ -44,8 +59,8 @@ int main(int argc, char *argv[]) {
 		printf("\n\t   [3] Tambah Menu Makanan dan Minuman");
 		printf("\n\t   [4] Pembayaran");
 		printf("\n\t   [5] Laporan");
+		printf("\n\t   [6] History");
 		printf("\n\t   [ESC]. Keluar");
-		printf("\n\t   [CTRL+S] Save ke file");
 		printf("\n\t   Masukan Pilihan >>>> ");
 		
 		pil = getche();
@@ -53,7 +68,15 @@ int main(int argc, char *argv[]) {
 		switch(pil)
 		{
 			case '1': 
-				autogenerateID (&LP,&no_nota);
+				if(cekMasukPertama==1 && !isEmpty(ListBaca))
+				{
+					cekMasukPertama=0;
+					no_nota=getNoNotaMax (ListBaca)+1;
+				}else
+				{
+					no_nota++;
+				}
+				
 				system("cls");
 				printf("\n\t======================= MENU INPUT NOTA =======================\n");
 				printf("\n\t Nomor Nota	: %d",no_nota);
@@ -105,6 +128,7 @@ int main(int argc, char *argv[]) {
 				N = makeNota(no_nota,nama_p,tanggal,nomor_meja,0);
 				fflush(stdin);
 				insertLastParent(&LP,N);
+				cekPilih=0;
 				do{
 					system("cls");
 					printf("\n\t=============================== MENU INPUT MAKANAN DAN MINUMAN ===============================\n");
@@ -119,9 +143,14 @@ int main(int argc, char *argv[]) {
 					{
 						printf("\n\t Total Tagihan	: Rp. %.2f",totNota);	
 					}
-					
-					printf("\n\n\t Masukan Pilihan	: ");scanf("%d",&menu);
-					if(menu>12)
+					menu=-1;
+					do
+					{
+						printf("\n\n\t Masukan Pilihan [0 = SELESAI]	: ");scanf("%d",&menu);
+						if(cekPilih==0 && menu!=0)
+							cekPilih++;
+					}while(cekPilih==0);
+					if(menu>12 || menu<0)
 					{
 						printf("\n\t     [!] Makanan yang dipilih Tidak Ada!! [!]");
 						getch();
@@ -144,9 +173,15 @@ int main(int argc, char *argv[]) {
 								printf("\n\t     [!] Inputan Jumlah tidak Valid!! [!]\n");
 							}
 						}while(jumlah<1);
-						J.minuman[menu-7]=J.minuman[menu-7]+jumlah;
+						J.makanan[menu-1]=J.makanan[menu-1]+jumlah;
 						
-						printf("\t Keterangan		: ");fflush(stdin);gets(keterangan);
+						do{
+							printf("\t Keterangan		: ");fflush(stdin);gets(keterangan);
+							if(strlen(keterangan)>15)
+							{
+								printf("\n\t     [!] Inputan Keterangan hanya 15 huruf!! [!]\n");
+							}
+						}while(strlen(keterangan)>15);
 
 						total=(float)jumlah*harga;
 						totNota=totNota+total;
@@ -178,7 +213,7 @@ int main(int argc, char *argv[]) {
 								printf("\n\t     [!] Inputan Jumlah tidak Valid!! [!]\n");
 							}
 						}while(jumlah<1);
-						J.makanan[menu-1]=J.makanan[menu-1]+jumlah;
+						J.minuman[menu-7]=J.minuman[menu-7]+jumlah;
 						printf("\t Keterangan		: ");fflush(stdin);gets(keterangan);
 
 						total=(float)jumlah*harga;
@@ -270,10 +305,10 @@ int main(int argc, char *argv[]) {
 								printChildByParentMakananUntukEdit(97,0,LP,X);
 							}
 							
-							gotoxy(20,22);
+							gotoxy(20,23);
 							printf("\n\t Total Tagihan		: Rp. %.2f",totNota);	
 							printf("\n\n\t Masukan Pilihan	: ");scanf("%d",&menu);
-							if(menu>12)
+							if(menu>12 || menu<0)
 							{
 								printf("\n\t     [!] Menu yang dipilih Tidak Ada!! [!]");
 								getch();
@@ -294,13 +329,24 @@ int main(int argc, char *argv[]) {
 										printf("\n\t     [!] Inputan Jumlah tidak Valid!! [!]");
 									}
 								}while(jumlah<1);
+								J.makanan[menu-1]=J.makanan[menu-1]+jumlah;
 								
 								printf("\t Keterangan		: ");fflush(stdin);gets(keterangan);
 		
 								total=(float)jumlah*harga;
 								totNota=totNota+total;
 								P = makePesanan (nama,jumlah,harga, keterangan);
-								insertLastMakanan(&LP,nomor_meja, P);
+								nota_single=FindParentbyNomor(LP,nomor_meja);
+								if(cekMakanan(nota_single->firstMakanan,nama)!=NULL)
+								{
+									
+									child=cekMakanan(nota_single->firstMakanan,nama);
+									child->M.jumlah_pcs+=jumlah;
+								}
+								else
+								{
+									insertLastMakanan(&LP,nomor_meja, P);
+								}
 								getch();
 							}else if (menu>6 && menu <13)
 							{
@@ -316,18 +362,29 @@ int main(int argc, char *argv[]) {
 										printf("\n\t     [!] Inputan Jumlah tidak Valid!! [!]");
 									}
 								}while(jumlah<1);
+								J.minuman[menu-7]=J.minuman[menu-7]+jumlah;
 								
 								printf("\t Keterangan		: ");fflush(stdin);gets(keterangan);
 		
 								total=(float)jumlah*harga;
 								P = makePesanan (nama, jumlah, harga, keterangan);
-								insertLastMinuman(&LP,nomor_meja, P);
+								nota_single=FindParentbyNomor(LP,nomor_meja);
+								if(cekMakanan(nota_single->firstMinuman,nama)!=NULL)
+								{
+									
+									child=cekMakanan(nota_single->firstMinuman,nama);
+									child->M.jumlah_pcs+=jumlah;
+								}
+								else
+								{
+									insertLastMinuman(&LP,nomor_meja, P);
+								}
 								totNota=totNota+total;
 							}
 						}while(menu!=0);
 							E=FindParentbyNomor(LP,nomor_meja);
 							E->N.total=totNota;
-							printf("\n\t Total Tagihan	: Rp. %.2f",totNota);	
+							printf("\n\t Total Tagihan		: Rp. %.2f",totNota);	
 							getch();
 							totNota = 0;
 							
@@ -348,8 +405,14 @@ int main(int argc, char *argv[]) {
 				break;
 			
 			case '5' :
-				if(!isEmpty(LP))
+				init_List(&ListBaca);
+				OmzetAllTime = 0;
+				OmzetToday = 0;
+				BacaNotaLaporan(&ListBaca,&OmzetAllTime,&OmzetToday);
+				if(!isEmpty(ListBaca))
 				{
+					printf("\n\n\t  Total Omzet ALL time		: Rp. %.2f\n",OmzetAllTime);
+					printf("\n\t  Total Omzet Hari ini 		: Rp. %.2f\n",OmzetToday);
 					if(isEmptyMa(J)==99)
 					{
 						sprintf(nama,"%s",GetNamaMakanan(getindexMaxMakanan(J)));
@@ -363,8 +426,14 @@ int main(int argc, char *argv[]) {
 				{
 					printf("\n\n\t     [!] DATA PESANAN MASIH KOSONG!! [!]");
 				}
+				
 				break;
-			
+			case '6' :
+				init_List(&ListBaca);
+				BacaNotaLaporan(&ListBaca,&OmzetAllTime,&OmzetToday);
+				system("cls");
+				printAll(ListBaca);
+				getch();
 			case 27 :
 				
 				break;
@@ -378,5 +447,3 @@ int main(int argc, char *argv[]) {
 	
 	return 0;
 }
-
-

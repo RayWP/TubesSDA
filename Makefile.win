@@ -4,11 +4,11 @@
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = main.o source.o daftarmenu.o view.o
-LINKOBJ  = main.o source.o daftarmenu.o view.o
-LIBS     = -static-libgcc -g3
-INCS     = 
-CXXINCS  = 
+OBJ      = main.o source.o
+LINKOBJ  = main.o source.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g3
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
 BIN      = Project1.exe
 CXXFLAGS = $(CXXINCS) -g3
 CFLAGS   = $(INCS) -g3
@@ -29,9 +29,3 @@ main.o: main.c
 
 source.o: source.c
 	$(CC) -c source.c -o source.o $(CFLAGS)
-
-daftarmenu.o: daftarmenu.c
-	$(CC) -c daftarmenu.c -o daftarmenu.o $(CFLAGS)
-
-view.o: view.c
-	$(CC) -c view.c -o view.o $(CFLAGS)

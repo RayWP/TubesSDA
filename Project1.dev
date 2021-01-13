@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=1
 CompilerSettings=0000000000000000001000000
-UnitCount=5
+UnitCount=3
 
 [VersionInfo]
 Major=1
@@ -70,16 +70,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit4]
-FileName=daftarmenu.c
-CompileCpp=0
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit1]
 FileName=header.h
 CompileCpp=0
@@ -91,16 +81,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=view.c
-CompileCpp=0
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit5]
 FileName=view.c
 CompileCpp=0
 Folder=
